@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="crane_purple_800">#FF5d1049</color>
+    <color name="crane_purple_700">#FF720d5d</color>
+    <color name="crane_purple_900">#FF4e0d3a</color>
+    <color name="crane_red">#FFe30425</color>
+
+<!--    <color name="teal_200">#FF03DAC5</color>-->
+<!--    <color name="teal_700">#FF018786</color>-->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

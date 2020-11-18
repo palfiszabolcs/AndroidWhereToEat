@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WhereToEat</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_dashboard">Dashboard</string>
+</resources>
