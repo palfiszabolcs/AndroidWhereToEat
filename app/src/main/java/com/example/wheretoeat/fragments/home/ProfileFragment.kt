@@ -1,11 +1,9 @@
-package com.example.wheretoeat.ui.home
+package com.example.wheretoeat.fragments.home
 
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.wheretoeat.R
 

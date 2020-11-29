@@ -1,7 +1,5 @@
-package com.example.wheretoeat.ui.home
+package com.example.wheretoeat.fragments.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class ProfileViewModel : ViewModel() {
