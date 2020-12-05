@@ -10,12 +10,32 @@
         android:name="com.example.wheretoeat.fragments.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard"
-        />
+        >
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_home"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_detailedView"
+            app:destination="@id/detailedView" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_profile"
         android:name="com.example.wheretoeat.fragments.home.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_dashboard2"
+            app:destination="@id/navigation_dashboard" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailedView"
+        android:name="com.example.wheretoeat.fragments.DetailedViewFragment"
+        android:label="fragment_detailed_view"
+        tools:layout="@layout/fragment_detailed_view" >
+        <argument
+            android:name="restaurant"
+            app:argType="com.example.wheretoeat.fragments.API.RestaurantData" />
+    </fragment>
 
 </navigation>

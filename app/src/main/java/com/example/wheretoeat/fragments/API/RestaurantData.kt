@@ -1,6 +1,8 @@
 package com.example.wheretoeat.fragments.API
 
-data class CountryData(
+import java.io.Serializable
+
+data class ResponseData(
     val total_entries: Int,
     val per_page: Int,
     val current_page: Int,
@@ -23,4 +25,4 @@ data class RestaurantData(
     val reserve_url: String,
     val mobile_reserve_url: String,
     val image_url: String,
-)
+) : Serializable

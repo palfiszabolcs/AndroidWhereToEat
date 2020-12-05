@@ -16,4 +16,15 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/crane_purple_700</item>
     </style>
+    <style name="CustomRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_rating_bar</item>
+        <item name="android:minHeight">50dp</item>
+        <item name="android:maxHeight">50dp</item>
+    </style>
+    <style name="RatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_rating_bar_v2</item>
+        <item name="android:indeterminateDrawable">@drawable/custom_rating_bar_v2</item>
+        <item name="android:minHeight">50dp</item>
+        <item name="android:maxHeight">50dp</item>
+    </style>
 </resources>

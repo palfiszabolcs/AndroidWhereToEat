@@ -15,6 +15,8 @@ class SplashScreen : AppCompatActivity() {
         val text = findViewById<TextView>(R.id.splash_text)
         text.startAnimation(scaleToBig)
 
+
+
         val SPLASH_TIME_OUT = 2000
         val homeIntent = Intent(this@SplashScreen, MainActivity::class.java)
         Handler().postDelayed({
