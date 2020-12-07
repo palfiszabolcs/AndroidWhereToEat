@@ -35,7 +35,7 @@ class DetailedViewFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(favorite == false){
             item.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_on))
-            favorite=true;
+            favorite = true;
         }else{
             item.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_off))
             favorite = false;
@@ -46,7 +46,7 @@ class DetailedViewFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+
         val view = inflater.inflate(R.layout.fragment_detailed_view, container, false)
         val image = view.findViewById<ImageView>(R.id.detailed_image)
         val address = view.findViewById<TextView>(R.id.address_text)

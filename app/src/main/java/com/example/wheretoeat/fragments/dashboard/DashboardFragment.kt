@@ -37,7 +37,6 @@ class DashboardFragment : Fragment(), RecyclerViewAdapter.Listener, SearchView.O
                 dashboardViewModel.restaurants = response.body()!!.restaurants
                 dashboardViewModel.adapter = RecyclerViewAdapter(view.context, dashboardViewModel.restaurants, this@DashboardFragment)
                 dashboardViewModel.recyclerView.adapter = dashboardViewModel.adapter
-
             }
         })
         dashboardViewModel.recyclerView.layoutManager = LinearLayoutManager(this.context)
