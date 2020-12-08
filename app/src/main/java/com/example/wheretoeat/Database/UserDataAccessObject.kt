@@ -12,6 +12,9 @@ interface UserDataAccessObject {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addUser(user: UserData)
 
-    @Query("SELECT * FROM user WHERE id like $userId")
-    fun readUserData(): LiveData<UserData>
+    @Query("SELECT* FROM user")
+    fun readAll(): List<UserData>
+
+    @Query("SELECT * FROM user WHERE uid IN (:userID)")
+    fun readUserData(userID: Int): UserData
 }

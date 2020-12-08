@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/background"
-        android:drawable="@drawable/money_off" />
+        android:drawable="@drawable/money_black" />
 
     <item android:id="@android:id/secondaryProgress"
-        android:drawable="@drawable/money_off" />
+        android:drawable="@drawable/money_green" />
 
     <item android:id="@android:id/progress"
-        android:drawable="@drawable/money_on" />
+        android:drawable="@drawable/money_green"/>
 
 </layer-list>

@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
-        addFirstUser()
+//        addFirstUser()
 
 
         navController = findNavController(R.id.nav_host_fragment)
@@ -54,18 +54,18 @@ class MainActivity : AppCompatActivity() {
 
     fun addFirstUser(){
         val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-//        val thread = Thread{
+        val thread = Thread{
         val user = UserData(
-            0,
+            1,
             "Palfi Szabolcs",
-            null,
             "Saromberke 517p",
             "0712345678",
             "palfiszabolcs@icloud.com",
-            null)
+            null,
+        )
         userViewModel.addUser(user)
-//        }
-//        thread.start()
+        }
+        thread.start()
     }
 
     override fun onSupportNavigateUp(): Boolean {
