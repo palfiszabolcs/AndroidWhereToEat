@@ -9,18 +9,26 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import androidx.room.Room
 import com.bumptech.glide.Glide
+import com.example.wheretoeat.Database.FavoritesDatabase
 import com.example.wheretoeat.R
+import com.example.wheretoeat.fragments.API.RestaurantData
+import com.example.wheretoeat.fragments.dashboard.DashboardViewModel
+import com.example.wheretoeat.fragments.home.ProfileViewModel
 import java.util.*
 
 
 class DetailedViewFragment : Fragment() {
 
     val arg: DetailedViewFragmentArgs by navArgs()
+    lateinit var viewModel: DashboardViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
         setHasOptionsMenu(true);
     }
 
@@ -28,19 +36,32 @@ class DetailedViewFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.detailed_view_menu, menu)
         val favorite = menu.findItem(R.id.detailed_favorite)
-        favorite.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_off)
+        favorite.setOnMenuItemClickListener {
+            if(arg.restaurant.favorite){
+                favorite.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_off))
+                deleteFromFavorites(arg.restaurant)
+                true
+            }else{
+                favorite.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_on))
+                arg.restaurant.favorite = true
+                addToFavorites(arg.restaurant)
+                false
+            }
+        }
+        if(arg.restaurant.favorite){
+            favorite.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_on)
+        }else{
+            favorite.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_off)
+        }
     }
 
-    var favorite = false
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(favorite == false){
-            item.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_on))
-            favorite = true;
-        }else{
-            item.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_off))
-            favorite = false;
-        }
-        return super.onOptionsItemSelected(item)
+    fun addToFavorites(restaurant: RestaurantData) {
+        restaurant.favorite = true
+        viewModel.addToFavorites(restaurant)
+    }
+
+    fun deleteFromFavorites(restaurant: RestaurantData) {
+        viewModel.deleteFromFavorites(restaurant.id)
     }
 
 
@@ -57,7 +78,6 @@ class DetailedViewFragment : Fragment() {
         val callButton = view.findViewById<Button>(R.id.call_button)
         val reserveButton = view.findViewById<Button>(R.id.reserve_button)
         val mapButton = view.findViewById<Button>(R.id.map_button)
-
 
         ratingBar.rating = arg.restaurant.price.toFloat()
         ratingBar.setIsIndicator(true)

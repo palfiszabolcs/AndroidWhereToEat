@@ -2,6 +2,7 @@ package com.example.wheretoeat.fragments.home
 
 import android.app.ActionBar
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,20 +12,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.example.wheretoeat.Database.FavoritesDatabase
 import com.example.wheretoeat.Database.UserDatabase
 import com.example.wheretoeat.Database.UserViewModel
+import com.example.wheretoeat.FavoritesRecyclerViewAdapter
 import com.example.wheretoeat.R
-import com.example.wheretoeat.RecyclerViewAdapter
-import com.example.wheretoeat.fragments.API.ResponseData
 import com.example.wheretoeat.fragments.API.RestaurantData
 import com.example.wheretoeat.fragments.dashboard.DashboardFragmentDirections
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
-class ProfileFragment : Fragment(), RecyclerViewAdapter.Listener {
+class ProfileFragment : Fragment(), FavoritesRecyclerViewAdapter.Listener {
 
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var userViewModel: UserViewModel
@@ -34,28 +33,18 @@ class ProfileFragment : Fragment(), RecyclerViewAdapter.Listener {
     lateinit var address: TextView
     lateinit var image: ImageView
 
-    private fun loadFavorites(view: View){
-        profileViewModel.recyclerView = view.findViewById(R.id.profile_recycler)
-        val params: ViewGroup.LayoutParams = profileViewModel.recyclerView.layoutParams
-        params.height = ActionBar.LayoutParams.WRAP_CONTENT
-        profileViewModel.recyclerView.layoutParams = params
-        profileViewModel.adapter = RecyclerViewAdapter(view.context, profileViewModel.restaurants, this)
-        profileViewModel.req.load(1).enqueue(object : Callback<ResponseData> {
+    private fun loadFavorites(){
+        val db = Room.databaseBuilder(
+                requireContext().applicationContext,
+                FavoritesDatabase::class.java,
+                "favorites"
+        ).build()
+        val thread = Thread{
+            userViewModel.favorites = db.favoritesDao().getFavorites()
+//            Log.d("loadFav", userViewModel.toString())
+        }
+        thread.start()
 
-            override fun onFailure(call: Call<ResponseData>, t: Throwable) {
-                Toast.makeText(view.context, "Failed request", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
-                profileViewModel.restaurants = response.body()!!.restaurants
-                profileViewModel.adapter = RecyclerViewAdapter(view.context, profileViewModel.restaurants, this@ProfileFragment)
-                profileViewModel.recyclerView.adapter = profileViewModel.adapter
-            }
-        })
-        profileViewModel.recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-
-//        profileViewModel.recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL)
-        profileViewModel.recyclerView.hasFixedSize()
     }
     private fun loadUserData() {
         val db = Room.databaseBuilder(
@@ -91,10 +80,22 @@ class ProfileFragment : Fragment(), RecyclerViewAdapter.Listener {
         address = view.findViewById<TextView>(R.id.profile_address)
         image = view.findViewById<ImageView>(R.id.profile_picture)
 
-        loadFavorites(view)
         loadUserData()
+        loadFavorites()
 
+        profileViewModel.recyclerView = view.findViewById(R.id.profile_recycler)
+        val params: ViewGroup.LayoutParams = profileViewModel.recyclerView.layoutParams
+        params.height = RecyclerView.LayoutParams.WRAP_CONTENT
+        profileViewModel.recyclerView.layoutParams = params
+        profileViewModel.recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        profileViewModel.recyclerView.hasFixedSize()
+        profileViewModel.adapter = FavoritesRecyclerViewAdapter(requireContext(), this@ProfileFragment)
+        profileViewModel.recyclerView.adapter = profileViewModel.adapter
 
+        userViewModel.favorites.observe(this.viewLifecycleOwner, {
+//            Log.d("favorites", it.toString())
+            profileViewModel.adapter.setData(it)
+        })
 
         return view
     }
@@ -114,7 +115,16 @@ class ProfileFragment : Fragment(), RecyclerViewAdapter.Listener {
     }
 
     override fun onClick(restaurant: RestaurantData) {
-        findNavController().navigate(DashboardFragmentDirections.actionNavigationDashboardToDetailedView(restaurant))
+//        restaurant.favorite = true
+        findNavController().navigate(ProfileFragmentDirections.actionNavigationProfileToDetailedView(restaurant))
+    }
+
+    override fun addToFavorites(restaurant: RestaurantData) {
+        userViewModel.addToFavorites(restaurant)
+    }
+
+    override fun deleteFromFavorites(restaurant: RestaurantData) {
+        userViewModel.deleteFromFavorites(restaurant.id)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

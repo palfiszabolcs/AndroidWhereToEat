@@ -5,16 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
-import android.widget.ToggleButton
+import android.widget.*
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.wheretoeat.fragments.API.RestaurantData
 
-class RecyclerViewAdapter(val context: Context, val restaurants: ArrayList<RestaurantData>, private var listener: Listener) : RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder>() {
+class FavoritesRecyclerViewAdapter(val context: Context, private var listener: Listener) : RecyclerView.Adapter<FavoritesRecyclerViewAdapter.RecyclerViewHolder>() {
+    private var restaurants: List<RestaurantData> = listOf()
 
     interface Listener {
         fun onClick(restaurant: RestaurantData)
@@ -46,11 +45,7 @@ class RecyclerViewAdapter(val context: Context, val restaurants: ArrayList<Resta
         holder.card_title.text = currentItem.name
         holder.card_address.text = currentItem.address
         holder.card_price.rating = currentItem.price.toFloat()
-        holder.card_favorite_button.isChecked = currentItem.favorite
-
-        Log.d("holder", currentItem.favorite.toString())
-//        Log.d("holder", favorites.toString())
-
+        holder.card_favorite_button.isChecked = restaurants.contains(currentItem)
         holder.card_favorite_button.setOnClickListener {
             if (holder.card_favorite_button.isChecked) {
                 listener.addToFavorites(currentItem)
@@ -62,20 +57,8 @@ class RecyclerViewAdapter(val context: Context, val restaurants: ArrayList<Resta
 
     override fun getItemCount() = restaurants.size
 
-    fun addMoreItems(list: ArrayList<RestaurantData>) {
-        restaurants.addAll(list)
+    fun setData(list: List<RestaurantData>){
+        restaurants = list
         notifyDataSetChanged()
     }
-
-    fun addMoreSearchItems(list: ArrayList<RestaurantData>) {
-        restaurants.addAll(list)
-        notifyDataSetChanged()
-    }
-
-    fun addSearch(list: ArrayList<RestaurantData>) {
-        restaurants.clear()
-        restaurants.addAll(list)
-        notifyDataSetChanged()
-    }
-
 }
