@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.navigation_profile -> {
                     navView.visibility = View.VISIBLE
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 }
                 else ->{
                     navView.visibility = View.GONE

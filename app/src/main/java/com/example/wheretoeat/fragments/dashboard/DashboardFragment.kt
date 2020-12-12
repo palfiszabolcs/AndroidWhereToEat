@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
@@ -18,13 +19,15 @@ import com.example.wheretoeat.R
 import com.example.wheretoeat.RecyclerViewAdapter
 import com.example.wheretoeat.fragments.API.ResponseData
 import com.example.wheretoeat.fragments.API.RestaurantData
+import com.example.wheretoeat.fragments.DetailedViewFragmentArgs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class DashboardFragment : Fragment(), RecyclerViewAdapter.Listener, SearchView.OnQueryTextListener {
+class DashboardFragment() : Fragment(), RecyclerViewAdapter.Listener, SearchView.OnQueryTextListener {
 
+    val arg: DashboardFragmentArgs by navArgs()
     private lateinit var dashboardViewModel: DashboardViewModel
 
     private fun loadFavorites(){
@@ -85,6 +88,10 @@ class DashboardFragment : Fragment(), RecyclerViewAdapter.Listener, SearchView.O
 
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
         loadData(view)
+        if(!arg.city.isNullOrEmpty() and !arg.price.isNullOrEmpty()){
+            Toast.makeText(requireContext(), "filter", Toast.LENGTH_LONG).show()
+            filter(arg.city!!, arg.price!!)
+        }
 
         return view
     }
@@ -188,6 +195,7 @@ class DashboardFragment : Fragment(), RecyclerViewAdapter.Listener, SearchView.O
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.app_bar_menu, menu)
         val search = menu.findItem(R.id.app_bar_search)
+        val filter = menu.findItem(R.id.app_bar_filter)
         val searchView = search.actionView as SearchView
         searchView.setOnCloseListener {
             dashboardViewModel.searchParam = "";
@@ -197,6 +205,10 @@ class DashboardFragment : Fragment(), RecyclerViewAdapter.Listener, SearchView.O
             false;
         }
         searchView.setOnQueryTextListener(this)
+        filter.setOnMenuItemClickListener {
+            findNavController().navigate(DashboardFragmentDirections.actionNavigationDashboardToFilter())
+            true
+        }
     }
 
     override fun onQueryTextSubmit(p0: String?): Boolean {
@@ -228,5 +240,19 @@ class DashboardFragment : Fragment(), RecyclerViewAdapter.Listener, SearchView.O
         dashboardViewModel.deleteFromFavorites(restaurant.id)
     }
 
-
+    private fun filter(city: String, price: String) {
+        dashboardViewModel.req.filter(city, price).enqueue(object : Callback<ResponseData> {
+            override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
+                if (response.isSuccessful) {
+                    dashboardViewModel.adapter.addSearch(response.body()!!.restaurants)
+//                    dashboardViewModel.adapter.addMoreSearchItems(response.body()!!.restaurants)
+                }
+            }
+            override fun onFailure(call: Call<ResponseData>, t: Throwable) {
+                Toast.makeText(view?.context, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+//        dashboardViewModel.currentPage++
+//        dashboardViewModel.isLoading = false
+    }
 }

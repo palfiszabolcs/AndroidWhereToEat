@@ -8,6 +8,28 @@
     tools:context=".fragments.Filter">
 
     <TextView
+        android:id="@+id/select_city_text"
+        android:layout_width="138dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="52dp"
+        android:text="Select a City"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.058"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/dropdown_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select_city_text" />
+
+    <TextView
         android:id="@+id/select_price_text"
         android:layout_width="138dp"
         android:layout_height="21dp"
@@ -22,45 +44,19 @@
         android:id="@+id/dropdown_price"
         android:layout_width="379dp"
         android:layout_height="25dp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_price_text" />
 
-    <TextView
-        android:id="@+id/select_city_text"
-        android:layout_width="138dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="32dp"
-        android:text="Select a City"
+    <Button
+        android:id="@+id/applyFilter_button"
+        android:layout_width="185dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="124dp"
+        android:text="Apply"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.058"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dropdown_state" />
+        app:layout_constraintTop_toBottomOf="@+id/dropdown_price" />
 
-    <Spinner
-        android:id="@+id/dropdown_city"
-        android:layout_width="379dp"
-        android:layout_height="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/select_city_text" />
-
-    <Spinner
-        android:id="@+id/dropdown_state"
-        android:layout_width="379dp"
-        android:layout_height="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/select_state_text" />
-
-    <TextView
-        android:id="@+id/select_state_text"
-        android:layout_width="138dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="48dp"
-        android:text="Select a State"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.058"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
