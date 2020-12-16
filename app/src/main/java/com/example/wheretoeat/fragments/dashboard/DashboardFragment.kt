@@ -27,7 +27,7 @@ import retrofit2.Response
 
 class DashboardFragment() : Fragment(), RecyclerViewAdapter.Listener, SearchView.OnQueryTextListener {
 
-    val arg: DashboardFragmentArgs by navArgs()
+
     private lateinit var dashboardViewModel: DashboardViewModel
 
     private fun loadFavorites(){
@@ -87,20 +87,72 @@ class DashboardFragment() : Fragment(), RecyclerViewAdapter.Listener, SearchView
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        loadData(view)
-        if(!arg.city.isNullOrEmpty() and !arg.price.isNullOrEmpty()){
-            Toast.makeText(requireContext(), "filter", Toast.LENGTH_LONG).show()
-            filter(arg.city!!, arg.price!!)
+
+        val args: DashboardFragmentArgs? by navArgs()
+//        Log.d("nav", args.toString())
+        if((args?.city != "-") and (args?.price != "-")){
+//            Toast.makeText(requireContext(), "filter", Toast.LENGTH_LONG).show()
+            Log.d("filter", "filter")
+            filter(view, args!!.city, args!!.price)
+        }else{
+            Log.d("filter", "loadData")
+            loadData(view)
         }
 
         return view
     }
 
 
+    private fun getMoreItems() {
+        dashboardViewModel.req.load(dashboardViewModel.currentPage+1).enqueue(object : Callback<ResponseData> {
+            override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
+                if (response.isSuccessful) {
+
+                    if ( response.body()!!.total_entries >= dashboardViewModel.adapter.itemCount ){
+//                        dashboardViewModel.restaurants.addAll(response.body()!!.restaurants)
+                        dashboardViewModel.adapter.addMoreItems(response.body()!!.restaurants)
+                    }
+                    else{
+                        Toast.makeText(view?.context, "No more restaurants!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ResponseData>, t: Throwable) {
+                Toast.makeText(view?.context, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+        dashboardViewModel.currentPage++
+        dashboardViewModel.isLoading = false
+
+    }
+    private fun getMoreFilterItems(city: String, price: String) {
+        dashboardViewModel.req.filter(city, price, dashboardViewModel.currentPage+1).enqueue(object : Callback<ResponseData> {
+            override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
+                if (response.isSuccessful) {
+
+                    if ( response.body()!!.total_entries >= dashboardViewModel.adapter.itemCount ){
+//                        dashboardViewModel.restaurants.addAll(response.body()!!.restaurants)
+                        dashboardViewModel.adapter.addMoreItems(response.body()!!.restaurants)
+                    }
+                    else{
+                        Toast.makeText(view?.context, "No more restaurants!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ResponseData>, t: Throwable) {
+                Toast.makeText(view?.context, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+        dashboardViewModel.currentPage++
+        dashboardViewModel.isLoading = false
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.title = "Dashboard"
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        val args: DashboardFragmentArgs? by navArgs()
 
         val layout_manager = dashboardViewModel.recyclerView.layoutManager
         dashboardViewModel.recyclerView.addOnScrollListener(object : PagingListener(layout_manager as LinearLayoutManager) {
@@ -117,34 +169,14 @@ class DashboardFragment() : Fragment(), RecyclerViewAdapter.Listener, SearchView
                 if(dashboardViewModel.searchParam != ""){
                    getMoreSearchItems()
                 }
+                if((args?.city != "-") and (args?.price != "-")){
+                    getMoreFilterItems(args!!.city, args!!.price)
+                }
                 else{
                     getMoreItems()
                 }
             }
         })
-
-    }
-
-    private fun getMoreItems() {
-        dashboardViewModel.req.load(dashboardViewModel.currentPage+1).enqueue(object : Callback<ResponseData> {
-            override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
-                if (response.isSuccessful) {
-
-                    if ( response.body()!!.total_entries >= dashboardViewModel.adapter.itemCount ){
-                        dashboardViewModel.restaurants.addAll(response.body()!!.restaurants)
-                        dashboardViewModel.adapter.addMoreItems(response.body()!!.restaurants)
-                    }
-                    else{
-                        Toast.makeText(view?.context, "No more restaurants to load!", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            override fun onFailure(call: Call<ResponseData>, t: Throwable) {
-                Toast.makeText(view?.context, "${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-        dashboardViewModel.currentPage++
-        dashboardViewModel.isLoading = false
 
     }
 
@@ -159,7 +191,7 @@ class DashboardFragment() : Fragment(), RecyclerViewAdapter.Listener, SearchView
             override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
                 if (response.isSuccessful) {
                     dashboardViewModel.adapter.addSearch(response.body()!!.restaurants)
-                    dashboardViewModel.adapter.addMoreSearchItems(response.body()!!.restaurants)
+//                    dashboardViewModel.adapter.addMoreSearchItems(response.body()!!.restaurants)
                 }
             }
             override fun onFailure(call: Call<ResponseData>, t: Throwable) {
@@ -175,7 +207,7 @@ class DashboardFragment() : Fragment(), RecyclerViewAdapter.Listener, SearchView
             override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
                 if (response.isSuccessful) {
                         if ( response.body()!!.total_entries >= dashboardViewModel.adapter.itemCount ){
-                        dashboardViewModel.adapter.addSearch(response.body()!!.restaurants)
+//                        dashboardViewModel.adapter.addSearch(response.body()!!.restaurants)
                         dashboardViewModel.adapter.addMoreSearchItems(response.body()!!.restaurants)
                     }
                     else{
@@ -197,13 +229,13 @@ class DashboardFragment() : Fragment(), RecyclerViewAdapter.Listener, SearchView
         val search = menu.findItem(R.id.app_bar_search)
         val filter = menu.findItem(R.id.app_bar_filter)
         val searchView = search.actionView as SearchView
-        searchView.setOnCloseListener {
-            dashboardViewModel.searchParam = "";
-            dashboardViewModel.restaurants.clear()
-            dashboardViewModel.reinitCounters()
-            loadData(requireView())
-            false;
-        }
+//        searchView.setOnCloseListener {
+//            dashboardViewModel.searchParam = "";
+//            dashboardViewModel.restaurants.clear()
+//            dashboardViewModel.reinitCounters()
+//            loadData(requireView())
+//            false;
+//        }
         searchView.setOnQueryTextListener(this)
         filter.setOnMenuItemClickListener {
             findNavController().navigate(DashboardFragmentDirections.actionNavigationDashboardToFilter())
@@ -240,19 +272,26 @@ class DashboardFragment() : Fragment(), RecyclerViewAdapter.Listener, SearchView
         dashboardViewModel.deleteFromFavorites(restaurant.id)
     }
 
-    private fun filter(city: String, price: String) {
-        dashboardViewModel.req.filter(city, price).enqueue(object : Callback<ResponseData> {
+    private fun filter(view: View, city: String, price: String) {
+        dashboardViewModel.recyclerView = view.findViewById(R.id.recycler_view)
+        dashboardViewModel.adapter = RecyclerViewAdapter(view.context, dashboardViewModel.restaurants, null)
+        dashboardViewModel.recyclerView.layoutManager = LinearLayoutManager(this.context)
+        dashboardViewModel.recyclerView.hasFixedSize()
+        dashboardViewModel.recyclerView.adapter = dashboardViewModel.adapter
+        dashboardViewModel.req.filter(city, price, 1).enqueue(object : Callback<ResponseData> {
             override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
                 if (response.isSuccessful) {
-                    dashboardViewModel.adapter.addSearch(response.body()!!.restaurants)
-//                    dashboardViewModel.adapter.addMoreSearchItems(response.body()!!.restaurants)
+//                    Log.d("filter", response.body().toString())
+                    dashboardViewModel.reinitCounters()
+//                    dashboardViewModel.adapter.addSearch(response.body()!!.restaurants)
+//                    dashboardViewModel.adapter.notifyDataSetChanged()
+                    dashboardViewModel.adapter.addFilter(response.body()!!.restaurants)
                 }
             }
             override fun onFailure(call: Call<ResponseData>, t: Throwable) {
-                Toast.makeText(view?.context, "${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(view.context, "${t.message}", Toast.LENGTH_LONG).show()
             }
         })
-//        dashboardViewModel.currentPage++
-//        dashboardViewModel.isLoading = false
+
     }
 }

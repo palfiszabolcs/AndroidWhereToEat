@@ -1,13 +1,12 @@
 package com.example.wheretoeat.fragments.home
 
-import android.app.ActionBar
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -20,7 +19,6 @@ import com.example.wheretoeat.Database.UserViewModel
 import com.example.wheretoeat.FavoritesRecyclerViewAdapter
 import com.example.wheretoeat.R
 import com.example.wheretoeat.fragments.API.RestaurantData
-import com.example.wheretoeat.fragments.dashboard.DashboardFragmentDirections
 
 
 class ProfileFragment : Fragment(), FavoritesRecyclerViewAdapter.Listener {
@@ -60,9 +58,13 @@ class ProfileFragment : Fragment(), FavoritesRecyclerViewAdapter.Listener {
             email.text = userViewModel.currentUser.email
             phone.text = userViewModel.currentUser.phone
             address.text = userViewModel.currentUser.address
-//            image.setImageResource(R.drawable.dollar_grey)
+            Log.d("image", userViewModel.currentUser.image.toString())
+            if(userViewModel.currentUser.image != null){
+                image.setImageURI(userViewModel.currentUser.image!!.toUri())
+            }
         }
         thread.start()
+        thread.join()
     }
 
     override fun onCreateView(
@@ -104,8 +106,7 @@ class ProfileFragment : Fragment(), FavoritesRecyclerViewAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.title = "Profile"
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,8 +133,8 @@ class ProfileFragment : Fragment(), FavoritesRecyclerViewAdapter.Listener {
         inflater.inflate(R.menu.profile_menu, menu)
         val editButton = menu.findItem(R.id.edit_profile_button)
         editButton.setOnMenuItemClickListener {
-            Toast.makeText(requireContext(), "edit!", Toast.LENGTH_SHORT).show()
-            false
+            findNavController().navigate(ProfileFragmentDirections.actionNavigationProfileToEditProfileFragment())
+            true
         }
 
     }

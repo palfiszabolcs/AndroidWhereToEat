@@ -14,11 +14,11 @@
         <argument
             android:name="city"
             app:argType="string"
-            app:nullable="true" />
+            android:defaultValue="-" />
         <argument
             android:name="price"
             app:argType="string"
-            app:nullable="true" />
+            android:defaultValue="-" />
         <action
             android:id="@+id/action_navigation_dashboard_to_detailedView"
             app:destination="@id/detailedView" />
@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_navigation_profile_to_detailedView"
             app:destination="@id/detailedView" />
+        <action
+            android:id="@+id/action_navigation_profile_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailedView"
@@ -65,5 +68,9 @@
                 app:nullable="true" />
         </action>
     </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.wheretoeat.fragments.home.EditProfileFragment"
+        android:label="EditProfileFragment" />
 
 </navigation>

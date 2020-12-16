@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.wheretoeat.fragments.API.RestaurantData
 
-class RecyclerViewAdapter(val context: Context, val restaurants: ArrayList<RestaurantData>, private var listener: Listener) : RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder>() {
+class RecyclerViewAdapter(val context: Context, restaurantsList: ArrayList<RestaurantData>, private var listener: Listener?) : RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder>() {
+
+    private val restaurants: ArrayList<RestaurantData> = restaurantsList
 
     interface Listener {
         fun onClick(restaurant: RestaurantData)
@@ -39,7 +41,7 @@ class RecyclerViewAdapter(val context: Context, val restaurants: ArrayList<Resta
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         val currentItem = restaurants[position]
         holder.card.setOnClickListener {
-            listener.onClick(currentItem)
+            listener?.onClick(currentItem)
         }
         val request = Glide.with(context)
         request.load(currentItem.image_url).into(holder.card_image)
@@ -48,14 +50,14 @@ class RecyclerViewAdapter(val context: Context, val restaurants: ArrayList<Resta
         holder.card_price.rating = currentItem.price.toFloat()
         holder.card_favorite_button.isChecked = currentItem.favorite
 
-        Log.d("holder", currentItem.favorite.toString())
+//        Log.d("holder", currentItem.favorite.toString())
 //        Log.d("holder", favorites.toString())
 
         holder.card_favorite_button.setOnClickListener {
             if (holder.card_favorite_button.isChecked) {
-                listener.addToFavorites(currentItem)
+                listener?.addToFavorites(currentItem)
             } else {
-                listener.deleteFromFavorites(currentItem)
+                listener?.deleteFromFavorites(currentItem)
             }
         }
     }
@@ -76,6 +78,16 @@ class RecyclerViewAdapter(val context: Context, val restaurants: ArrayList<Resta
         restaurants.clear()
         restaurants.addAll(list)
         notifyDataSetChanged()
+    }
+
+    fun addFilter(list: ArrayList<RestaurantData>) {
+//        Log.d("filter", "adapter" + list.toString())
+        restaurants.clear()
+//        Log.d("filter", "adapter - after clear" + restaurants.toString())
+        restaurants.addAll(list)
+//        Log.d("filter", "adapter - after add" + restaurants.toString())
+        notifyDataSetChanged()
+        Log.d("filter", "adapter - after notify" + restaurants.toString())
     }
 
 }

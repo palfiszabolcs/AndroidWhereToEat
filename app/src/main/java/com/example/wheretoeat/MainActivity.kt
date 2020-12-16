@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         userViewModel.addUser(user)
         }
         thread.start()
+        thread.join()
     }
 
     override fun onSupportNavigateUp(): Boolean {

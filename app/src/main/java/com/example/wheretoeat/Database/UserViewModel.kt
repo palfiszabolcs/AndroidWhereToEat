@@ -23,25 +23,31 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 //        Log.d("read",repository.allUsers.toString())
     }
 
-    fun addUser(user: UserData){
+    fun addUser(user: UserData) {
         viewModelScope.launch(Dispatchers.IO) {
             userRepository.addUser(user)
         }
     }
 
-    fun readAll(){
+    fun updateUser(user: UserData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userRepository.updateUser(user)
+        }
+    }
+
+    fun readAll() {
         viewModelScope.launch(Dispatchers.IO) {
             userRepository.readAll()
         }
     }
 
-    fun addToFavorites(restaurant: RestaurantData){
+    fun addToFavorites(restaurant: RestaurantData) {
         viewModelScope.launch {
             favRepo.addRestaurant(restaurant)
         }
     }
 
-    fun deleteFromFavorites(restaurant: Int){
+    fun deleteFromFavorites(restaurant: Int) {
         viewModelScope.launch {
             favRepo.deleteRestaurant(restaurant)
         }

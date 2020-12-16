@@ -16,5 +16,5 @@ interface ApiRequests {
     fun getCities() : Call<CitiesData>
 
     @GET("restaurants?country=US")
-    fun filter(@Query("city") city: String, @Query("price") price: String): Call<ResponseData>
+    fun filter(@Query("city") city: String, @Query("price") price: String, @Query("page") page: Int): Call<ResponseData>
 }

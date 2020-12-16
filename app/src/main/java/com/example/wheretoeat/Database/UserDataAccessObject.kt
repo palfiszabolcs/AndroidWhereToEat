@@ -1,10 +1,7 @@
 package com.example.wheretoeat.Database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 const val userId = 1;
 @Dao
@@ -17,4 +14,7 @@ interface UserDataAccessObject {
 
     @Query("SELECT * FROM user WHERE uid IN (:userID)")
     fun readUserData(userID: Int): UserData
+
+    @Update(entity = UserData::class)
+    suspend fun updateUser(user: UserData)
 }

@@ -14,9 +14,7 @@ data class UserData(
     @ColumnInfo(name = "address") val address: String?,
     @ColumnInfo(name = "phone") val phone: String?,
     @ColumnInfo(name = "email") val email: String?,
-    @ColumnInfo(name = "picture",typeAffinity = ColumnInfo.BLOB) val picture: ByteArray?,
-
-//    @Ignore val favorites: ArrayList<RestaurantData>?,
+    @ColumnInfo(name = "image") val image: String?,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -28,10 +26,7 @@ data class UserData(
         if (name != other.name) return false
         if (email != other.email) return false
         if (address != other.address) return false
-        if (picture != null) {
-            if (other.picture == null) return false
-            if (!picture.contentEquals(other.picture)) return false
-        } else if (other.picture != null) return false
+        if (image != other.image) return false
         if (phone != other.phone) return false
 
         return true
@@ -43,7 +38,7 @@ data class UserData(
         result = 31 * result + (address?.hashCode() ?: 0)
         result = 31 * result + (phone?.hashCode() ?: 0)
         result = 31 * result + (email?.hashCode() ?: 0)
-        result = 31 * result + (picture?.contentHashCode() ?: 0)
+        result = 31 * result + (image?.hashCode() ?: 0)
 //        result = 31 * result + (favorites?.hashCode() ?: 0)
         return result
     }
