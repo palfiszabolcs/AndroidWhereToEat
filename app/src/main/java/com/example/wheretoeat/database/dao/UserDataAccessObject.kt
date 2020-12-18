@@ -1,9 +1,7 @@
-package com.example.wheretoeat.Database
-
-import androidx.lifecycle.LiveData
+package com.example.wheretoeat.database.dao
 import androidx.room.*
+import com.example.wheretoeat.database.UserData
 
-const val userId = 1;
 @Dao
 interface UserDataAccessObject {
     @Insert(onConflict = OnConflictStrategy.IGNORE)

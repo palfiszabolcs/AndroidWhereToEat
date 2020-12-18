@@ -1,6 +1,7 @@
-package com.example.wheretoeat.Database
+package com.example.wheretoeat.database.repo
 
 import androidx.lifecycle.LiveData
+import com.example.wheretoeat.database.dao.FavoritesDao
 import com.example.wheretoeat.fragments.API.RestaurantData
 
 class FavoritesRepository(private val favDao: FavoritesDao) {

@@ -1,16 +1,15 @@
-package com.example.wheretoeat
+package com.example.wheretoeat.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.wheretoeat.fragments.API.RestaurantData
+import com.example.wheretoeat.R
 
 class FavoritesRecyclerViewAdapter(val context: Context, private var listener: Listener) : RecyclerView.Adapter<FavoritesRecyclerViewAdapter.RecyclerViewHolder>() {
     private var restaurants: List<RestaurantData> = listOf()

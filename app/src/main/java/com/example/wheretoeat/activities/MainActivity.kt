@@ -1,22 +1,16 @@
-package com.example.wheretoeat
+package com.example.wheretoeat.activities
 
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.room.Room
-import com.example.wheretoeat.Database.UserData
-import com.example.wheretoeat.Database.UserDatabase
-import com.example.wheretoeat.Database.UserViewModel
+import com.example.wheretoeat.database.UserData
+import com.example.wheretoeat.viewModels.UserViewModel
+import com.example.wheretoeat.R
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,8 +21,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
+//        uncomment funtion to add user on first run
 //        addFirstUser()
-
 
         navController = findNavController(R.id.nav_host_fragment)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->

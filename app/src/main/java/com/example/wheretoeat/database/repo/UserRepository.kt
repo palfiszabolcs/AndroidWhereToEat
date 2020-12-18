@@ -1,11 +1,9 @@
-package com.example.wheretoeat.Database
+package com.example.wheretoeat.database.repo
 
-import androidx.lifecycle.LiveData
+import com.example.wheretoeat.database.dao.UserDataAccessObject
+import com.example.wheretoeat.database.UserData
 
 class UserRepository(private val userDao: UserDataAccessObject) {
-//    val readUser: LiveData<UserData> = userDao.readUserData()
-//    lateinit var allUsers: List<UserData>
-
 
     suspend fun addUser(user: UserData){
         userDao.addUser(user)

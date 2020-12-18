@@ -1,4 +1,4 @@
-package com.example.wheretoeat.fragments.API
+package com.example.wheretoeat.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

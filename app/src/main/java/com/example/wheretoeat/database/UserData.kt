@@ -1,11 +1,8 @@
-package com.example.wheretoeat.Database
+package com.example.wheretoeat.database
 
-import android.graphics.Picture
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.example.wheretoeat.fragments.API.RestaurantData
 
 @Entity(tableName = "user")
 data class UserData(
@@ -39,7 +36,6 @@ data class UserData(
         result = 31 * result + (phone?.hashCode() ?: 0)
         result = 31 * result + (email?.hashCode() ?: 0)
         result = 31 * result + (image?.hashCode() ?: 0)
-//        result = 31 * result + (favorites?.hashCode() ?: 0)
         return result
     }
 }

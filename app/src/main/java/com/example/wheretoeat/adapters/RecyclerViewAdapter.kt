@@ -1,4 +1,4 @@
-package com.example.wheretoeat
+package com.example.wheretoeat.adapters
 
 import android.content.Context
 import android.util.Log
@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.wheretoeat.fragments.API.RestaurantData
+import com.example.wheretoeat.R
 
 class RecyclerViewAdapter(val context: Context, restaurantsList: ArrayList<RestaurantData>, private var listener: Listener?) : RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder>() {
 
@@ -26,11 +27,11 @@ class RecyclerViewAdapter(val context: Context, restaurantsList: ArrayList<Resta
 
     class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val card = itemView.findViewById<CardView>(R.id.card)
-        val card_image = itemView.findViewById<ImageView>(R.id.card_image)
-        val card_title = itemView.findViewById<TextView>(R.id.card_title)
-        val card_address = itemView.findViewById<TextView>(R.id.card_address)
-        val card_price = itemView.findViewById<RatingBar>(R.id.card_price)
-        val card_favorite_button = itemView.findViewById<ToggleButton>(R.id.card_favorite_button)
+        val cardImage = itemView.findViewById<ImageView>(R.id.card_image)
+        val cardTitle = itemView.findViewById<TextView>(R.id.card_title)
+        val cardAddress = itemView.findViewById<TextView>(R.id.card_address)
+        val cardPrice = itemView.findViewById<RatingBar>(R.id.card_price)
+        val cardFavoriteButton = itemView.findViewById<ToggleButton>(R.id.card_favorite_button)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
@@ -44,17 +45,14 @@ class RecyclerViewAdapter(val context: Context, restaurantsList: ArrayList<Resta
             listener?.onClick(currentItem)
         }
         val request = Glide.with(context)
-        request.load(currentItem.image_url).into(holder.card_image)
-        holder.card_title.text = currentItem.name
-        holder.card_address.text = currentItem.address
-        holder.card_price.rating = currentItem.price.toFloat()
-        holder.card_favorite_button.isChecked = currentItem.favorite
+        request.load(currentItem.image_url).into(holder.cardImage)
+        holder.cardTitle.text = currentItem.name
+        holder.cardAddress.text = currentItem.address
+        holder.cardPrice.rating = currentItem.price.toFloat()
+        holder.cardFavoriteButton.isChecked = currentItem.favorite
 
-//        Log.d("holder", currentItem.favorite.toString())
-//        Log.d("holder", favorites.toString())
-
-        holder.card_favorite_button.setOnClickListener {
-            if (holder.card_favorite_button.isChecked) {
+        holder.cardFavoriteButton.setOnClickListener {
+            if (holder.cardFavoriteButton.isChecked) {
                 listener?.addToFavorites(currentItem)
             } else {
                 listener?.deleteFromFavorites(currentItem)
@@ -81,13 +79,10 @@ class RecyclerViewAdapter(val context: Context, restaurantsList: ArrayList<Resta
     }
 
     fun addFilter(list: ArrayList<RestaurantData>) {
-//        Log.d("filter", "adapter" + list.toString())
         restaurants.clear()
-//        Log.d("filter", "adapter - after clear" + restaurants.toString())
         restaurants.addAll(list)
-//        Log.d("filter", "adapter - after add" + restaurants.toString())
         notifyDataSetChanged()
-        Log.d("filter", "adapter - after notify" + restaurants.toString())
+
     }
 
 }

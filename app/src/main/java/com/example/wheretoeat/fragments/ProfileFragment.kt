@@ -1,4 +1,4 @@
-package com.example.wheretoeat.fragments.home
+package com.example.wheretoeat.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -13,12 +13,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
-import com.example.wheretoeat.Database.FavoritesDatabase
-import com.example.wheretoeat.Database.UserDatabase
-import com.example.wheretoeat.Database.UserViewModel
-import com.example.wheretoeat.FavoritesRecyclerViewAdapter
+import com.example.wheretoeat.database.FavoritesDatabase
+import com.example.wheretoeat.database.UserDatabase
+import com.example.wheretoeat.viewModels.UserViewModel
+import com.example.wheretoeat.adapters.FavoritesRecyclerViewAdapter
 import com.example.wheretoeat.R
 import com.example.wheretoeat.fragments.API.RestaurantData
+import com.example.wheretoeat.viewModels.ProfileViewModel
 
 
 class ProfileFragment : Fragment(), FavoritesRecyclerViewAdapter.Listener {
@@ -39,7 +40,6 @@ class ProfileFragment : Fragment(), FavoritesRecyclerViewAdapter.Listener {
         ).build()
         val thread = Thread{
             userViewModel.favorites = db.favoritesDao().getFavorites()
-//            Log.d("loadFav", userViewModel.toString())
         }
         thread.start()
 
@@ -52,13 +52,10 @@ class ProfileFragment : Fragment(), FavoritesRecyclerViewAdapter.Listener {
         ).build()
         val thread = Thread{
             userViewModel.currentUser = db.userDao().readUserData(1)
-//            Log.d("readAll", userViewModel.currentUser.toString())
-
             name.text = userViewModel.currentUser.name
             email.text = userViewModel.currentUser.email
             phone.text = userViewModel.currentUser.phone
             address.text = userViewModel.currentUser.address
-            Log.d("image", userViewModel.currentUser.image.toString())
             if(userViewModel.currentUser.image != null){
                 image.setImageURI(userViewModel.currentUser.image!!.toUri())
             }
@@ -76,11 +73,11 @@ class ProfileFragment : Fragment(), FavoritesRecyclerViewAdapter.Listener {
         profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        name = view.findViewById<TextView>(R.id.profile_name)
-        email = view.findViewById<TextView>(R.id.profile_email)
-        phone = view.findViewById<TextView>(R.id.profile_phone)
-        address = view.findViewById<TextView>(R.id.profile_address)
-        image = view.findViewById<ImageView>(R.id.profile_picture)
+        name = view.findViewById(R.id.profile_name)
+        email = view.findViewById(R.id.profile_email)
+        phone = view.findViewById(R.id.profile_phone)
+        address = view.findViewById(R.id.profile_address)
+        image = view.findViewById(R.id.profile_picture)
 
         loadUserData()
         loadFavorites()
@@ -95,13 +92,10 @@ class ProfileFragment : Fragment(), FavoritesRecyclerViewAdapter.Listener {
         profileViewModel.recyclerView.adapter = profileViewModel.adapter
 
         userViewModel.favorites.observe(this.viewLifecycleOwner, {
-//            Log.d("favorites", it.toString())
             profileViewModel.adapter.setData(it)
         })
-
         return view
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -116,7 +110,6 @@ class ProfileFragment : Fragment(), FavoritesRecyclerViewAdapter.Listener {
     }
 
     override fun onClick(restaurant: RestaurantData) {
-//        restaurant.favorite = true
         findNavController().navigate(ProfileFragmentDirections.actionNavigationProfileToDetailedView(restaurant))
     }
 

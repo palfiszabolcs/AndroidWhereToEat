@@ -1,3 +1,5 @@
+package com.example.wheretoeat.api
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 

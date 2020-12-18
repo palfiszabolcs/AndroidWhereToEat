@@ -1,4 +1,4 @@
-package com.example.wheretoeat.fragments.API
+package com.example.wheretoeat.api
 
 data class CitiesData(
         val cities: List<String>

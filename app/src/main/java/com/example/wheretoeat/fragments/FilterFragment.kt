@@ -12,16 +12,15 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.wheretoeat.R
-import com.example.wheretoeat.fragments.API.ApiRequests
-import com.example.wheretoeat.fragments.API.CitiesData
-import com.example.wheretoeat.fragments.API.RetrofitClient
-import com.example.wheretoeat.fragments.dashboard.DashboardFragmentDirections
+import com.example.wheretoeat.api.ApiRequests
+import com.example.wheretoeat.api.CitiesData
+import com.example.wheretoeat.api.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class Filter : Fragment() {
+class FilterFragment : Fragment() {
 
     var req = RetrofitClient.retrofit.create(ApiRequests::class.java)
     lateinit var cities : List<String>
@@ -42,10 +41,6 @@ class Filter : Fragment() {
             }
         })
     }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,9 +57,7 @@ class Filter : Fragment() {
         applyButton.setOnClickListener {
             val city = citiesSpinner.selectedItem.toString()
             val price = priceSpinner.selectedItem.toString()
-            findNavController().navigate(FilterDirections.actionFilterToNavigationDashboard(city, price))
-
-//            Toast.makeText(requireContext(), city + price, Toast.LENGTH_LONG).show()
+            findNavController().navigate(FilterFragmentDirections.actionFilterToNavigationDashboard(city, price))
         }
 
 

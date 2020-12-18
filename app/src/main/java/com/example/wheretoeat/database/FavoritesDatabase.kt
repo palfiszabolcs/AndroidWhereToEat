@@ -1,9 +1,10 @@
-package com.example.wheretoeat.Database
+package com.example.wheretoeat.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.wheretoeat.database.dao.FavoritesDao
 import com.example.wheretoeat.fragments.API.RestaurantData
 
 @Database(entities = [RestaurantData::class], version = 1, exportSchema = false)

@@ -1,35 +1,34 @@
-package com.example.wheretoeat.fragments.dashboard
+package com.example.wheretoeat.viewModels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wheretoeat.Database.FavoritesDatabase
-import com.example.wheretoeat.Database.FavoritesRepository
-import com.example.wheretoeat.RecyclerViewAdapter
-import com.example.wheretoeat.fragments.API.ApiRequests
+import com.example.wheretoeat.database.FavoritesDatabase
+import com.example.wheretoeat.database.repo.FavoritesRepository
+import com.example.wheretoeat.adapters.RecyclerViewAdapter
+import com.example.wheretoeat.api.ApiRequests
 import com.example.wheretoeat.fragments.API.RestaurantData
-import com.example.wheretoeat.fragments.API.RetrofitClient
+import com.example.wheretoeat.api.RetrofitClient
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(application: Application) : AndroidViewModel(application) {
-//
         var restaurants = ArrayList<RestaurantData>()
         var favorites : LiveData<List<RestaurantData>>
         val dao = FavoritesDatabase.getDatabase(application).favoritesDao()
         val favRepo = FavoritesRepository(dao)
 
         lateinit var recyclerView: RecyclerView
-        lateinit var adapter:RecyclerViewAdapter
+        lateinit var adapter: RecyclerViewAdapter
         var req = RetrofitClient.retrofit.create(ApiRequests::class.java)
         var isLastPage:Boolean = false //false
         var isLoading :Boolean = false //false
         var currentPage = 1
         var searchParam = ""
 
-        init {
+        init
+        {
                 favorites = favRepo.favorites
         }
 
@@ -50,9 +49,5 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
                         favRepo.deleteRestaurant(restaurant)
                 }
         }
-
-
-//
-
 
 }

@@ -1,5 +1,6 @@
-package com.example.wheretoeat.fragments.API
+package com.example.wheretoeat.api
 
+import com.example.wheretoeat.fragments.API.ResponseData
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

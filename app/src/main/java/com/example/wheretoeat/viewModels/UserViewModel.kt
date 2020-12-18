@@ -1,9 +1,14 @@
-package com.example.wheretoeat.Database
+package com.example.wheretoeat.viewModels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.example.wheretoeat.database.FavoritesDatabase
+import com.example.wheretoeat.database.repo.FavoritesRepository
+import com.example.wheretoeat.database.repo.UserRepository
+import com.example.wheretoeat.database.UserData
+import com.example.wheretoeat.database.UserDatabase
 import com.example.wheretoeat.fragments.API.RestaurantData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +25,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         userRepository = UserRepository(userDao)
         favRepo = FavoritesRepository(favDao)
         favorites = favRepo.favorites
-//        Log.d("read",repository.allUsers.toString())
     }
 
     fun addUser(user: UserData) {
@@ -32,12 +36,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun updateUser(user: UserData) {
         viewModelScope.launch(Dispatchers.IO) {
             userRepository.updateUser(user)
-        }
-    }
-
-    fun readAll() {
-        viewModelScope.launch(Dispatchers.IO) {
-            userRepository.readAll()
         }
     }
 

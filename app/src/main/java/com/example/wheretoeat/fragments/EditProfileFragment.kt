@@ -1,9 +1,7 @@
-package com.example.wheretoeat.fragments.home
+package com.example.wheretoeat.fragments
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,16 +15,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.room.Room
-import com.example.wheretoeat.Database.UserData
-import com.example.wheretoeat.Database.UserDatabase
-import com.example.wheretoeat.Database.UserViewModel
+import com.example.wheretoeat.database.UserData
+import com.example.wheretoeat.database.UserDatabase
+import com.example.wheretoeat.viewModels.UserViewModel
 import com.example.wheretoeat.R
 
 
 class EditProfileFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
-
     lateinit var name: EditText
     lateinit var email: EditText
     lateinit var phone: EditText
@@ -99,7 +96,6 @@ class EditProfileFragment : Fragment() {
 
 
     private fun pickImageFromGallery() {
-//        val intent = Intent(Intent.ACTION_PICK)
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.type = "image/*"
         startActivityForResult(intent, 666)
@@ -108,8 +104,6 @@ class EditProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == 666) {
-//            Toast.makeText(requireContext(), data?.data.toString(), Toast.LENGTH_LONG).show()
-//            Log.d("image", data?.data!!.path.toString())
             imageUri = data?.data.toString()
             image.setImageURI(imageUri!!.toUri())
         }
